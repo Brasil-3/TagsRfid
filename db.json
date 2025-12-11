@@ -1,0 +1,20 @@
+{
+  "TAG-001": {
+    "modelo": "Ironside Micro",
+    "fabricante": "Confidex",
+    "tipo": "On-Metal / Rígida",
+    "chip": "Monza 4QT",
+    "img": "assets/img/tag-001.jpg",
+    "pdf": "assets/pdf/ironside-micro.pdf",
+    "descricao": "Tag robusta ideal para ativos de TI e superfícies metálicas pequenas."
+  },
+  "TAG-002": {
+    "modelo": "Smartrac Dogbone",
+    "fabricante": "Avery Dennison",
+    "tipo": "Inlay / Vidro e Plástico",
+    "chip": "Monza R6",
+    "img": "assets/img/tag-002.jpg",
+    "pdf": "assets/pdf/dogbone.pdf",
+    "descricao": "Excelente performance em vidro e materiais de baixa condutividade."
+  }
+}

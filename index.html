@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo RFID</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .tag-img { max-height: 250px; object-fit: contain; width: 100%; border-radius: 10px; }
+        .card { box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: none; }
+        .header-color { background-color: #0d6efd; color: white; padding: 20px 0; margin-bottom: 20px; }
+        #loading { text-align: center; margin-top: 50px; }
+        #content { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="header-color text-center">
+        <h3>Catálogo de Tags RFID</h3>
+    </div>
+
+    <div class="container">
+        
+        <div id="loading">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2">Buscando informações da tag...</p>
+        </div>
+
+        <div id="error" class="alert alert-danger text-center" style="display: none;">
+            <strong>Erro:</strong> Tag não encontrada ou ID inválido.
+        </div>
+
+        <div id="content" class="card p-4 mx-auto" style="max-width: 600px;">
+            <div class="text-center mb-3">
+                <img id="tag-img" src="" alt="Imagem da Tag" class="tag-img bg-light">
+            </div>
+
+            <h2 id="tag-modelo" class="text-primary text-center fw-bold">...</h2>
+            <p class="text-center text-muted badge bg-secondary mx-auto d-block" style="width: fit-content;" id="tag-id">...</p>
+
+            <hr>
+
+            <div class="row mt-3">
+                <div class="col-6"><strong>Fabricante:</strong></div>
+                <div class="col-6 text-end" id="tag-fabricante">...</div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-6"><strong>Tipo:</strong></div>
+                <div class="col-6 text-end" id="tag-tipo">...</div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-6"><strong>Chip (IC):</strong></div>
+                <div class="col-6 text-end" id="tag-chip">...</div>
+            </div>
+
+            <div class="mt-4 p-3 bg-light rounded">
+                <strong>Descrição:</strong><br>
+                <span id="tag-descricao">...</span>
+            </div>
+
+            <div class="d-grid gap-2 mt-4">
+                <a id="btn-datasheet" href="#" target="_blank" class="btn btn-primary btn-lg">
+                    📄 Baixar Datasheet Completo
+                </a>
+            </div>
+        </div>
+
+        <div class="text-center mt-5 text-muted" style="font-size: 0.8rem;">
+            <p>Uso Interno - Controle de Estoque</p>
+        </div>
+    </div>
+
+    <script>
+        async function carregarTag() {
+            // 1. Pega o ID da URL (ex: ?id=TAG-001)
+            const params = new URLSearchParams(window.location.search);
+            const tagId = params.get('id');
+
+            if (!tagId) {
+                mostrarErro("Nenhum ID especificado.");
+                return;
+            }
+
+            try {
+                // 2. Lê o arquivo JSON
+                const response = await fetch('db.json');
+                const data = await response.json();
+                const tag = data[tagId];
+
+                if (!tag) {
+                    mostrarErro("Tag não encontrada no banco de dados.");
+                    return;
+                }
+
+                // 3. Preenche o HTML com os dados
+                document.getElementById('tag-id').innerText = tagId;
+                document.getElementById('tag-modelo').innerText = tag.modelo;
+                document.getElementById('tag-fabricante').innerText = tag.fabricante;
+                document.getElementById('tag-tipo').innerText = tag.tipo;
+                document.getElementById('tag-chip').innerText = tag.chip;
+                document.getElementById('tag-descricao').innerText = tag.descricao;
+                
+                // Configura Imagem e PDF
+                document.getElementById('tag-img').src = tag.img;
+                document.getElementById('btn-datasheet').href = tag.pdf;
+
+                // Mostra o conteúdo
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+
+            } catch (err) {
+                console.error(err);
+                mostrarErro("Erro ao carregar banco de dados.");
+            }
+        }
+
+        function mostrarErro(msg) {
+            document.getElementById('loading').style.display = 'none';
+            const errDiv = document.getElementById('error');
+            errDiv.style.display = 'block';
+            errDiv.innerText = msg;
+        }
+
+        // Inicia a função ao carregar a página
+        carregarTag();
+    </script>
+</body>
+</html>
