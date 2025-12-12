@@ -173,7 +173,8 @@
 
         async function init() {
             try {
-                const response = await fetch('db.json');
+                // Adicionando um timestamp para evitar cache do navegador ao atualizar o JSON no GitHub
+                const response = await fetch('db.json?v=' + new Date().getTime());
                 globalDb = await response.json();
 
                 const params = new URLSearchParams(window.location.search);
@@ -190,7 +191,7 @@
 
             } catch (err) {
                 console.error(err);
-                document.getElementById('loading').innerHTML = '<div class="alert alert-danger">Erro ao carregar dados.</div>';
+                document.getElementById('loading').innerHTML = '<div class="alert alert-danger">Erro ao carregar dados (db.json). Verifique se o arquivo está na raiz.</div>';
             }
         }
 
@@ -206,23 +207,26 @@
             Object.keys(globalDb).forEach(key => {
                 const tag = globalDb[key];
                 
+                // Tratamento caso os campos novos ainda não existam no JSON antigo
+                // IMPORTANTE: Propriedades em Maiúsculo para bater com o C#
+                const modelo = tag.Modelo || 'Modelo N/D';
+                const pn = tag.PartNumber || '-';
+                const tam = tag.Tamanho || '-';
+                const fab = tag.Fabricante || '-';
+
                 const col = document.createElement('div');
                 col.className = 'col';
                 
-                // Tratamento caso os campos novos ainda não existam no JSON antigo
-                const pn = tag.partNumber || '-';
-                const tam = tag.tamanho || '-';
-
                 col.innerHTML = `
                     <div class="card h-100 catalog-card">
                         <div class="card-body d-flex flex-column pt-4">
-                            <h5 class="card-title fw-bold" style="color: #101d42;">${tag.modelo}</h5>
+                            <h5 class="card-title fw-bold" style="color: #101d42;">${modelo}</h5>
                             
                             <div class="mt-3 mb-3">
                                 <p class="card-text text-muted small mb-1">ID: ${key}</p>
                                 <p class="card-text small mb-1"><strong>PN:</strong> ${pn}</p>
                                 <p class="card-text small mb-1"><strong>Tam:</strong> ${tam}</p>
-                                <p class="card-text small text-secondary">Fab: ${tag.fabricante}</p>
+                                <p class="card-text small text-secondary">Fab: ${fab}</p>
                             </div>
 
                             <a href="?id=${key}" class="btn btn-primary-custom btn-sm mt-auto w-100">
@@ -248,21 +252,29 @@
                 return;
             }
 
-            // Preenche os dados
-            document.getElementById('tag-id').innerText = id; // ID Interno (TAG-XXXX)
-            document.getElementById('tag-modelo').innerText = tag.modelo;
+            // Preenche os dados usando PascalCase (igual ao JSON do C#)
+            document.getElementById('tag-id').innerText = id;
+            document.getElementById('tag-modelo').innerText = tag.Modelo || 'S/ Modelo';
             
-            // Novos Campos
-            document.getElementById('tag-partnumber').innerText = tag.partNumber || 'N/A';
-            document.getElementById('tag-tamanho').innerText = tag.tamanho || 'N/A';
+            document.getElementById('tag-partnumber').innerText = tag.PartNumber || 'N/A';
+            document.getElementById('tag-tamanho').innerText = tag.Tamanho || 'N/A';
 
-            document.getElementById('tag-fabricante').innerText = tag.fabricante;
-            document.getElementById('tag-tipo').innerText = tag.tipo;
-            document.getElementById('tag-chip').innerText = tag.chip;
-            document.getElementById('tag-descricao').innerText = tag.descricao;
+            document.getElementById('tag-fabricante').innerText = tag.Fabricante || '-';
+            document.getElementById('tag-tipo').innerText = tag.Tipo || '-';
+            document.getElementById('tag-chip').innerText = tag.Chip || '-';
+            document.getElementById('tag-descricao').innerText = tag.Descricao || 'Sem descrição.';
             
             // Link do PDF
-            document.getElementById('btn-datasheet').href = tag.pdf || '#';
+            const btnPdf = document.getElementById('btn-datasheet');
+            if (tag.Pdf && tag.Pdf !== "assets/pdf/default.pdf") {
+                btnPdf.href = tag.Pdf;
+                btnPdf.classList.remove('disabled');
+                btnPdf.innerHTML = '<i class="bi bi-file-earmark-pdf"></i> Baixar Datasheet Oficial';
+            } else {
+                btnPdf.href = "#";
+                btnPdf.classList.add('disabled');
+                btnPdf.innerHTML = '<i class="bi bi-slash-circle"></i> Datasheet Indisponível';
+            }
 
             document.getElementById('detail-view').style.display = 'block';
         }
@@ -284,9 +296,11 @@
 
                 const resultados = Object.keys(globalDb).filter(key => {
                     const tag = globalDb[key];
-                    const modelo = tag.modelo.toLowerCase();
+                    
+                    // Proteção contra nulos (|| '') antes do toLowerCase()
+                    const modelo = (tag.Modelo || '').toLowerCase();
                     const id = key.toLowerCase();
-                    const pn = (tag.partNumber || '').toLowerCase(); // Busca também pelo PN Comercial
+                    const pn = (tag.PartNumber || '').toLowerCase(); 
                     
                     return id.includes(termo) || modelo.includes(termo) || pn.includes(termo);
                 });
@@ -300,10 +314,10 @@
                         item.href = `?id=${key}`;
                         item.innerHTML = `
                             <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1 fw-bold" style="color: #101d42;">${tag.modelo}</h6>
+                                <h6 class="mb-1 fw-bold" style="color: #101d42;">${tag.Modelo || 'S/ Modelo'}</h6>
                                 <small>${key}</small>
                             </div>
-                            <small class="text-muted">PN: ${tag.partNumber || '-'} | ${tag.fabricante}</small>
+                            <small class="text-muted">PN: ${tag.PartNumber || '-'} | ${tag.Fabricante || '-'}</small>
                         `;
                         resultsDiv.appendChild(item);
                     });
