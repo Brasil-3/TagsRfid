@@ -17,4 +17,15 @@
     "pdf": "assets/pdf/dogbone.pdf",
     "descricao": "Excelente performance em vidro e materiais de baixa condutividade."
   }
+  "TAG-0001": {
+  "Modelo": "BEONTAG SWIFT",
+  "Fabricante": "Beontag",
+  "Tipo": "On-Metal",
+  "Chip": "M830",
+  "Descricao": "Tag boa",
+  "Img": "assets/img/default.png",
+  "Pdf": "assets/pdf/TAG-0001.pdf",
+  "PartNumber": "AN862N107",
+  "Tamanho": "60x25MM"
+}
 }
