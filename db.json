@@ -1,31 +1,14 @@
 {
-  "TAG-001": {
-    "modelo": "Ironside Micro",
-    "fabricante": "Confidex",
-    "tipo": "On-Metal / Rígida",
-    "chip": "Monza 4QT",
-    "img": "assets/img/tag-001.jpg",
-    "pdf": "assets/pdf/ironside-micro.pdf",
-    "descricao": "Tag robusta ideal para ativos de TI e superfícies metálicas pequenas."
-  },
-  "TAG-002": {
-    "modelo": "Smartrac Dogbone",
-    "fabricante": "Avery Dennison",
-    "tipo": "Inlay / Vidro e Plástico",
-    "chip": "Monza R6",
-    "img": "assets/img/tag-002.jpg",
-    "pdf": "assets/pdf/dogbone.pdf",
-    "descricao": "Excelente performance em vidro e materiais de baixa condutividade."
-  },
   "TAG-0001": {
-  "Modelo": "BEONTAG SWIFT",
-  "Fabricante": "Beontag",
-  "Tipo": "On-Metal",
-  "Chip": "M830",
-  "Descricao": "Tag boa",
-  "Img": "assets/img/default.png",
-  "Pdf": "assets/pdf/TAG-0001.pdf",
-  "PartNumber": "AN862N107",
-  "Tamanho": "60x25MM"
-}
+    "Modelo": "Swift sticker label",
+    "Fabricante": "Beontag",
+    "Tipo": "Inlay/Label",
+    "Chip": "M830",
+    "Descricao": "Aplicações gerais, aplicação em papelão e plástico",
+    "Img": "assets/img/default.png",
+    "Pdf": "assets/pdf/TAG-0001.pdf",
+    "Epc": "",
+    "PartNumber": "AN862N107",
+    "Tamanho": "60X25"
+  }
 }
