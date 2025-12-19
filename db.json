@@ -1,14 +1,14 @@
 {
   "TAG-0001": {
-    "Modelo": "Swift sticker label",
+    "Modelo": "ECO Bumper",
     "Fabricante": "Beontag",
     "Tipo": "Inlay/Label",
-    "Chip": "M830",
-    "Descricao": "Aplicações gerais, aplicação em papelão e plástico",
+    "Chip": "UCODE 9",
+    "Descricao": "Tag RFID sustentável e \"plastic-free\". É projetada para aplicações de logística e cadeia de suprimentos global, oferecendo excelente desempenho e confiabilidade em superfícies como papelão e plástico.",
     "Img": "assets/img/default.png",
     "Pdf": "assets/pdf/TAG-0001.pdf",
     "Epc": "",
-    "PartNumber": "AN862N107",
-    "Tamanho": "60X25"
+    "PartNumber": "3004381",
+    "Tamanho": "97x27 mm"
   }
 }
